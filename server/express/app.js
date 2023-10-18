@@ -47,14 +47,14 @@ app.route('/api/powers/:name')
         }
     })
 
-    app.get('/api/publishers', (req, res) => {
-        // Stores unique publishers in a set
-        const publishers = new Set(); 
-        superheroInfo.forEach((hero) => {
-          publishers.add(hero.Publisher);
+        app.get('/api/publishers', (req, res) => {
+            // Stores unique publishers in a set
+            const publishers = new Set(); 
+            superheroInfo.forEach((hero) => {
+            publishers.add(hero.Publisher);
+            });
+            // Sends response as array
+            res.json(Array.from(publishers)); 
         });
-      
-        res.json(Array.from(publishers)); // Convert Set to an array and send it as a response
-      });
 
 app.listen(3000, () => console.log('Listening on port 3000'))
