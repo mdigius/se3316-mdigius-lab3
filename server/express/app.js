@@ -46,15 +46,32 @@ app.route('/api/powers/:name')
             res.status(404).json({ message: `No existing powers for superhero with name: ${name}` });
         }
     })
+// Returns list of all publishers
+app.get('/api/publishers', (req, res) => {
+    // Stores unique publishers in a set
+    const publishers = new Set(); 
+    superheroInfo.forEach((hero) => {
+    publishers.add(hero.Publisher);
+    });
+    // Sends response as array
+    res.json(Array.from(publishers)); 
+    });
+// Returns a list of all heroes from a given publisher
+app.get('/api/publishers/:id', (req, res) => {
+    const pub = req.params.id;
+    const heroes = new Set()
+    superheroInfo.forEach((hero) => {
+        if(hero.Publisher == pub){
+            heroes.add(hero)
+        }
+    })
+    if (heroes) {
+        res.json(Array.from(heroes));
+    } else {
+        res.status(404).json({ message: `No existing heroes for publisher: ${pub}` });
+    }
+})
 
-        app.get('/api/publishers', (req, res) => {
-            // Stores unique publishers in a set
-            const publishers = new Set(); 
-            superheroInfo.forEach((hero) => {
-            publishers.add(hero.Publisher);
-            });
-            // Sends response as array
-            res.json(Array.from(publishers)); 
-        });
+
 
 app.listen(3000, () => console.log('Listening on port 3000'))
