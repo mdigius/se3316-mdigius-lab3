@@ -1,9 +1,12 @@
 // Require express and filesystem modules
 const express = require('express');
 const fs = require('fs')
+const cors = require('cors'); // Import the cors package
 
 const app = express()
 
+
+app.use(cors()); // Enable CORS for all routes
 // Parse the provided JSON files to be used by app object
 const superheroInfo = JSON.parse(fs.readFileSync('superhero_info.json'));
 const superheroPowers = JSON.parse(fs.readFileSync('superhero_powers.json'));
