@@ -54,19 +54,27 @@ app.route('/api/powers/hero/:name')
 
 // Search functionality to return all hero names with a given power
 app.get('/api/powers/:power', (req, res) => {
-    const power = req.params.power.toLowerCase();
+    const requestedPower = req.params.power.toLowerCase();
     const heroes = new Set();
+
     superheroPowers.forEach((hero) => {
-        if (hero[power] === "true") {
-            heroes.add(hero.hero_names);
+        // Convert each power name to lowercase for case-insensitive comparison
+        for (const key in hero) {
+            if (key !== 'hero_names' && hero[key] && key.toLowerCase() === requestedPower) {
+                if (hero[key].toLowerCase() === 'true') {
+                    heroes.add(hero.hero_names);
+                }
+            }
         }
     });
+
     if (heroes.size > 0) {
         res.json(Array.from(heroes));
     } else {
-        res.status(404).json({ message: `No existing heroes for power: ${power}` });
+        res.status(404).json({ message: `No existing heroes for power: ${req.params.power}` });
     }
 });
+
 
 // Returns list of all publishers
 app.get('/api/publishers', (req, res) => {

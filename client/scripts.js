@@ -1,3 +1,5 @@
+var nCriteria = 5
+
 function fetchAndRenderData(url) {
     fetch(url)
         .then(response => response.json())
@@ -8,10 +10,15 @@ function fetchAndRenderData(url) {
             // Checks to see if it is one result or an array
             if (Array.isArray(data)) {
                 // If array, creates multiple result boxes inside of results
-                data.forEach(result => {
-                    const resultBox = createResultBox(result);
+                // data.forEach(result => {
+                //     const resultBox = createResultBox(result);
+                //     resultsElement.appendChild(resultBox);
+                // });
+                for(let i=0; i<nCriteria; i++){
+                    const resultBox = createResultBox(data[i]);
                     resultsElement.appendChild(resultBox);
-                });
+
+                }
             } 
             else {
                 // If single element just creates one resultbox
@@ -79,11 +86,9 @@ function fetchSuperheroByRace(race = "") {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Your JavaScript code here
     document.getElementById('search-button').addEventListener('click', function() {
         const searchInput = document.getElementById('search-input').value;
         const searchCriteria = document.getElementById('search-criteria').value;
-
         if (searchCriteria === 'id') {
             fetchSuperheroByID(searchInput);
         } else if (searchCriteria === 'name') {
@@ -95,5 +100,12 @@ document.addEventListener('DOMContentLoaded', function() {
         } else if (searchCriteria === 'publisher') {
             fetchSuperheroByPublisher(searchInput);
         }
+    });
+    // Get the select element
+    var selectElement = document.getElementById('return-n');
+
+    // Add an event listener to the select element
+    selectElement.addEventListener('change', function() {
+        nCriteria = parseInt(selectElement.value);
     });
 });

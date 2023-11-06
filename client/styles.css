@@ -99,7 +99,7 @@ body {
   margin-right: 10px;
 }
 
-#search-criteria {
+select {
   padding: 10px;
   border: 2px solid black;
   border-radius: 15px;
@@ -107,19 +107,19 @@ body {
   transition: background-color 0.3s, color 0.3s;
 }
 
-#search-criteria:hover {
+select:hover {
   background-color: white;
   color: black;
 }
 
 
-#search-criteria:active {
+select:active {
   background-color: gray;
   color: white;
 }
 
 
-#search-criteria:focus,
+select:focus,
 #search-input:focus {
   outline: none;
 }
@@ -137,7 +137,7 @@ body {
 }
 .result-box {
   
-  color: #000000;
+  color: #cc2020;
   background-color: rgb(215, 180, 94);
   margin: 10px;
   padding: 10px;
