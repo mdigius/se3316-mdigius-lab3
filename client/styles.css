@@ -1,7 +1,5 @@
-/* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css?family=Poppins:400,600');
 
-/* Reset styles and set the font family */
 * {
   margin: 0;
   padding: 0;
@@ -9,7 +7,6 @@
   font-family: 'Poppins', sans-serif;
 }
 
-/* Body styles */
 body {
   margin: 0;
   background: #222;
@@ -17,7 +14,6 @@ body {
   text-align: center;
 }
 
-/* Header styles */
 .name {
   font-size: medium;
   color: #ffffff;
@@ -40,7 +36,6 @@ body {
   transition: .5s;
 }
 
-/* Navbar styles */
 .navbar a {
   font-size: medium;
   color: #ffffff;
@@ -55,7 +50,6 @@ body {
   color: rgb(93, 0, 0);
 }
 
-/* Search bar styles */
 .search {
   background-color: #cc2020;
   position: absolute;
@@ -73,7 +67,6 @@ body {
   padding-top: 15px;
 }
 
-/* Search button styles */
 #search-button {
   border-radius: 15px;
   background-color: black;
@@ -99,7 +92,6 @@ body {
   outline: none;
 }
 
-/* Search input and dropdown styles */
 #search-input {
   padding: 10px;
   border: 2px solid black;
@@ -115,30 +107,39 @@ body {
   transition: background-color 0.3s, color 0.3s;
 }
 
-/* Style the dropdown when hovered */
 #search-criteria:hover {
   background-color: white;
   color: black;
 }
 
-/* Style the dropdown when clicked */
+
 #search-criteria:active {
   background-color: gray;
   color: white;
 }
 
-/* Optional: Remove button outline on focus */
+
 #search-criteria:focus,
 #search-input:focus {
   outline: none;
 }
 .results {
-  color: black;
+  background-color: #cc2020;
+  position: absolute;
   top: 450px;
-  position: relative;
-  background-color: #f0f0f0; /* Set the background color */
-  padding: 10px; /* Add some padding for spacing */
-  border: 1px solid #ccc; /* Add a border for a container look */
-  border-radius: 5px; /* Rounded corners for the container */
-  margin-top: 10px; /* Add margin at the top for separation */
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0 10%;
+  border-radius: 50px;
+  width: 90%;
+  box-shadow: 0px 0px 20px goldenrod;
+}
+.result-box {
+  color: #cc2020;
+  background-color: #fff;
+  margin: 10px;
+  padding: 10px;
+  border: 2px solid #000;
+  border-radius: 10px;
+  box-shadow: 0px 0px 6px goldenrod;
 }

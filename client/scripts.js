@@ -1,71 +1,89 @@
-function fetchSuperheroByID(id = 0) {
-    fetch(`http://localhost:3000/api/superheroInfo/${id}`)
+function fetchAndRenderData(url) {
+    fetch(url)
         .then(response => response.json())
         .then(data => {
             const resultsElement = document.querySelector('.results');
-            resultsElement.innerHTML = JSON.stringify(data);
+            // Clear the existing content inside of the results div
+            resultsElement.innerHTML = ''; 
+            // Checks to see if it is one result or an array
+            if (Array.isArray(data)) {
+                // If array, creates multiple result boxes inside of results
+                data.forEach(result => {
+                    const resultBox = createResultBox(result);
+                    resultsElement.appendChild(resultBox);
+                });
+            } 
+            else {
+                // If single element just creates one resultbox
+                const resultBox = createResultBox(data);
+                resultsElement.appendChild(resultBox);
+            } 
         })
         .catch(error => {
             console.error('Error:', error);
         });
+}
+
+function createResultBox(result) {
+    // Creates new div element named result box
+    const resultBox = document.createElement('div');
+    resultBox.className = 'result-box';
+    // Adds each key of the result into the box as a p element
+    if(typeof result == 'string'){
+        // If result is a single string, add just the string
+        const attributeElement = document.createElement('p')
+        attributeElement.textContent = `${result}`
+        resultBox.appendChild(attributeElement)
+
+    } else {
+        // If its an object, add each attribute
+        for (const key in result) {
+            
+            if (result.hasOwnProperty(key)) {
+                const attributeElement = document.createElement('p');
+                attributeElement.textContent = `${key}: ${result[key]}`;
+                resultBox.appendChild(attributeElement);
+            }
+        }
+    }
+
+    return resultBox;
+}
+
+
+
+
+function fetchSuperheroByID(id = 0) {
+    const url = `http://localhost:3000/api/superheroInfo/${id}`;
+    fetchAndRenderData(url);
 }
 
 function fetchSuperheroByName(name = "") {
-    fetch(`http://localhost:3000/api/superheroInfo/name/${name}`)
-        .then(response => response.json())
-        .then(data => {
-            const resultsElement = document.querySelector('.results');
-            resultsElement.innerHTML = JSON.stringify(data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+    const url = `http://localhost:3000/api/superheroInfo/name/${name}`;
+    fetchAndRenderData(url);
 }
 
 function fetchSuperheroByPower(power = "") {
-    fetch(`http://localhost:3000/api/powers/${power}`)
-        .then(response => response.json())
-        .then(data => {
-            const resultsElement = document.querySelector('.results');
-            resultsElement.innerHTML = JSON.stringify(data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+    const url = `http://localhost:3000/api/powers/${power}`;
+    fetchAndRenderData(url);
 }
 
 function fetchSuperheroByPublisher(publisher = "") {
-    fetch(`http://localhost:3000/api/publishers/${publisher}`)
-        .then(response => response.json())
-        .then(data => {
-            const resultsElement = document.querySelector('.results');
-            resultsElement.innerHTML = JSON.stringify(data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+    const url = `http://localhost:3000/api/publishers/${publisher}`;
+    fetchAndRenderData(url);
 }
 
 function fetchSuperheroByRace(race = "") {
-    fetch(`http://localhost:3000/api/race/${race}`)
-        .then(response => response.json())
-        .then(data => {
-            const resultsElement = document.querySelector('.results');
-            resultsElement.innerHTML = JSON.stringify(data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+    const url = `http://localhost:3000/api/race/${race}`;
+    fetchAndRenderData(url);
 }
-
-
 
 document.addEventListener('DOMContentLoaded', function() {
     // Your JavaScript code here
     document.getElementById('search-button').addEventListener('click', function() {
         const searchInput = document.getElementById('search-input').value;
         const searchCriteria = document.getElementById('search-criteria').value;
-    
+
         if (searchCriteria === 'id') {
             fetchSuperheroByID(searchInput);
         } else if (searchCriteria === 'name') {
