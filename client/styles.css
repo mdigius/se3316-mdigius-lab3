@@ -47,7 +47,7 @@ body {
 
 .navbar a:hover,
 .navbar a.active {
-  color: rgb(93, 0, 0);
+  color: goldenrod;
 }
 
 .search {
@@ -67,7 +67,7 @@ body {
   padding-top: 15px;
 }
 
-#search-button {
+button {
   border-radius: 15px;
   background-color: black;
   color: white;
@@ -77,18 +77,18 @@ body {
   transition: background-color 0.3s, color 0.3s;
 }
 
-#search-button:hover {
+button:hover {
   background-color: white;
   color: black;
 }
 
-#search-button:active {
+button:active {
   background-color: gray;
   color: white;
   transform: scale(0.95);
 }
 
-#search-button:focus {
+button:focus {
   outline: none;
 }
 

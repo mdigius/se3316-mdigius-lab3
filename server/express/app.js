@@ -32,9 +32,9 @@ app.route('/api/superheroInfo/:id')
 app.route('/api/superheroInfo/name/:name')
     .get((req, res) => {
         const name = req.params.name.toLowerCase();
-        const superhero = superheroInfo.find((hero) => hero.name.toLowerCase() === name);
-        if (superhero) {
-            res.json(superhero);
+        const superheroes = superheroInfo.filter((hero) => hero.name.toLowerCase().includes(name));
+        if (superheroes.length > 0) {
+            res.json(superheroes);
         } else {
             res.status(404).json({ message: `No existing superhero with name: ${name}` });
         }
@@ -45,8 +45,15 @@ app.route('/api/powers/hero/:name')
     .get((req, res) => {
         const name = req.params.name.toLowerCase();
         const powers = superheroPowers.find((power) => power.hero_names.toLowerCase() === name);
+        const truePowers = new Set()
         if (powers) {
-            res.json(powers);
+            // Loops over all powers and only appends true powers to the set
+            for(const power in powers){
+                if(powers[power] == 'True'){
+                    truePowers.add(power)
+                }
+            }
+            res.json(Array.from(truePowers));
         } else {
             res.status(404).json({ message: `No existing powers for superhero with name: ${name}` });
         }
@@ -60,9 +67,10 @@ app.get('/api/powers/:power', (req, res) => {
     superheroPowers.forEach((hero) => {
         // Convert each power name to lowercase for case-insensitive comparison
         for (const key in hero) {
-            if (key !== 'hero_names' && hero[key] && key.toLowerCase() === requestedPower) {
+            if (key !== 'hero_names' && hero[key] && key.toLowerCase().includes(requestedPower)) {
                 if (hero[key].toLowerCase() === 'true') {
-                    heroes.add(hero.hero_names);
+                    heroes.add(superheroInfo.find((heroObj) => heroObj.name.toLowerCase() === hero.hero_names.toLowerCase()));
+
                 }
             }
         }
