@@ -134,7 +134,7 @@ function fetchHeroLists(){
 function createHeroList(result){
     // Creates new div element named result box
     const resultBox = document.createElement('div');
-    resultBox.className = 'result-box';
+    resultBox.className = 'hero-result-box';
     // Adds each key of the result into the box as a p element
         // If its an object, add each attribute
         

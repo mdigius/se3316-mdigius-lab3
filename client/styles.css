@@ -136,9 +136,23 @@ input:focus {
 
 }
 .result-box {
-  
+  font-weight: 300;
+  font-size: 16px;
   color: #cc2020;
   background-color: rgb(215, 180, 94);
+  margin: 10px;
+  padding: 10px;
+  border: 2px solid #000;
+  border-radius: 10px;
+ 
+  box-shadow: 0px 0px 6px goldenrod;
+}
+.hero-result-box {
+  
+  color: #000000;
+  font-size: 35px;
+  font-weight: 700;
+  background-color: rgb(215, 138, 94);
   margin: 10px;
   padding: 10px;
   border: 2px solid #000;
