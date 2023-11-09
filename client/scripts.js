@@ -28,6 +28,8 @@ function fetchAndRenderData(url) {
         });
 }
 
+
+
 function createErrorBox(errorMessage) {
     const errorBox = document.createElement('div');
     errorBox.className = 'error-box';
@@ -73,6 +75,41 @@ function createResultBox(result) {
     return resultBox;
 }
 
+function fetchHeroLists(){
+    const url = 'http://localhost:3000/api/lists'
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const listResults = document.querySelector('.list-results')
+            listResults.innerHTML = ''
+            if (Array.isArray(data)) {
+                for (let i = 0; i < data.length && i < data.length; i++) {
+                    console.log(data[i])
+                    const heroList = createHeroList(data[i]);
+                    listResults.appendChild(heroList);
+                }
+            }
+
+
+        })
+    
+}
+
+function createHeroList(result){
+    // Creates new div element named result box
+    const resultBox = document.createElement('div');
+    resultBox.className = 'result-box';
+    // Adds each key of the result into the box as a p element
+        // If its an object, add each attribute
+        
+    const attributeElement = document.createElement('p');
+    attributeElement.textContent = result
+    resultBox.appendChild(attributeElement);
+            
+        
+    return resultBox;
+}
 
 function postSuperHeroList(listName) {
     // API url to superhero lists
@@ -90,6 +127,7 @@ function postSuperHeroList(listName) {
     // Handles all possible responses from the API
     .then(response => {
       if (!response.ok) {
+        alert(`Error! List with name ${listName} already exists!`)
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       return response.json();
@@ -100,6 +138,7 @@ function postSuperHeroList(listName) {
     .catch(error => {
       console.error('Error:', error);
     });
+    
   }
 
   function postSuperHeroIDToList(listName, heroID) {
@@ -156,30 +195,50 @@ function fetchSuperheroByRace(race = "") {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    postSuperHeroList('New List')
-    postSuperHeroIDToList('New List', 12)
-    document.getElementById('search-button').addEventListener('click', function() {
-        const searchInput = document.getElementById('search-input').value;
-        const searchCriteria = document.getElementById('search-criteria').value;
-        if(searchInput!=''){
-            if (searchCriteria === 'name') {
-                fetchSuperheroByName(searchInput);
-            } else if (searchCriteria === 'power') {
-                fetchSuperheroByPower(searchInput);
-            } else if (searchCriteria === 'race') {
-                fetchSuperheroByRace(searchInput);
-            } else if (searchCriteria === 'publisher') {
-                fetchSuperheroByPublisher(searchInput);
+    if(document.getElementById('create-list-button')!=null){
+        document.getElementById('create-list-button').addEventListener('click', function() {
+            nameInput = document.getElementById('list-name-input').value
+            if(nameInput!=''){
+                postSuperHeroList(nameInput)
+                document.getElementById('list-name-input').value = ''
+                setTimeout(function() {
+                    fetchHeroLists()
+                }, 1000)
+            } else {
+                alert('Please enter a list name!')
             }
-        } else {
-            alert(`Please Enter Search Criteria!`);
-        }
-    });
+            
+        })
+        fetchHeroLists()
+    }
+    if(document.getElementById('search-button')!=null){
+        document.getElementById('search-button').addEventListener('click', function() {
+            const searchInput = document.getElementById('search-input').value;
+            const searchCriteria = document.getElementById('search-criteria').value;
+            if(searchInput!=''){
+                if (searchCriteria === 'name') {
+                    fetchSuperheroByName(searchInput);
+                } else if (searchCriteria === 'power') {
+                    fetchSuperheroByPower(searchInput);
+                } else if (searchCriteria === 'race') {
+                    fetchSuperheroByRace(searchInput);
+                } else if (searchCriteria === 'publisher') {
+                    fetchSuperheroByPublisher(searchInput);
+                }
+            } else {
+                alert(`Please Enter Search Criteria!`);
+            }
+        });
+    }
     // Get the select element
     var selectElement = document.getElementById('return-n');
 
     // Add an event listener to the select element
-    selectElement.addEventListener('change', function() {
-        nCriteria = parseInt(selectElement.value);
-    });
+    if(selectElement!=null){
+        selectElement.addEventListener('change', function() {
+            nCriteria = parseInt(selectElement.value);
+        });
+    }
+    
 });
+

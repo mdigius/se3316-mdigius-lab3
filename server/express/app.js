@@ -5,7 +5,6 @@ const storage = require('node-persist');
 
 const initializeStorage = async () => {
     await storage.init();
-    await storage.clear()
     
   };
 
