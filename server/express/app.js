@@ -67,10 +67,13 @@ app.get('/api/powers/:power', (req, res) => {
     superheroPowers.forEach((hero) => {
         // Convert each power name to lowercase for case-insensitive comparison
         for (const key in hero) {
-            if (key !== 'hero_names' && hero[key] && key.toLowerCase().includes(requestedPower)) {
+            if (key.toLowerCase().includes(requestedPower)) {
                 if (hero[key].toLowerCase() === 'true') {
-                    heroes.add(superheroInfo.find((heroObj) => heroObj.name.toLowerCase() === hero.hero_names.toLowerCase()));
-
+                    // Checks to see if there is a hero found, and not just a null object
+                    const foundHero = superheroInfo.find((heroObj) => heroObj.name.toLowerCase() === hero.hero_names.toLowerCase());
+                    if (foundHero) {
+                        heroes.add(foundHero);
+                    }
                 }
             }
         }
@@ -98,7 +101,7 @@ app.get('/api/publishers/:id', (req, res) => {
     const pub = req.params.id.toLowerCase();
     const heroes = new Set();
     superheroInfo.forEach((hero) => {
-        if (hero.Publisher.toLowerCase() === pub) {
+        if (hero.Publisher.toLowerCase().includes(pub)) {
             heroes.add(hero);
         }
     });
@@ -123,8 +126,8 @@ app.get('/api/race/:id', (req, res) => {
     const race = req.params.id.toLowerCase();
     const heroes = new Set();
     superheroInfo.forEach((hero) => {
-        if (hero.Race.toLowerCase() === race) {
-            heroes.add(hero.name);
+        if (hero.Race.toLowerCase().includes(race)) {
+            heroes.add(hero);
         }
     });
     if (heroes.size > 0) {

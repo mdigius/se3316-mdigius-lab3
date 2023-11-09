@@ -44,14 +44,6 @@ function createResultBox(result) {
     const resultBox = document.createElement('div');
     resultBox.className = 'result-box';
     // Adds each key of the result into the box as a p element
-    
-    if(typeof result == 'string'){
-        // If result is a single string, add just the string
-        const attributeElement = document.createElement('p')
-        attributeElement.textContent = `${result}`
-        resultBox.appendChild(attributeElement)
-
-    } else {
         // If its an object, add each attribute
         for (const key in result) {
             if (result.hasOwnProperty(key)) {
@@ -76,13 +68,8 @@ function createResultBox(result) {
                 .catch(error => {
                     console.error('Error fetching powers:', error);
                 });
-            
         })
         resultBox.appendChild(button)
-
-        
-    }
-
     return resultBox;
 }
 
@@ -118,16 +105,18 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('search-button').addEventListener('click', function() {
         const searchInput = document.getElementById('search-input').value;
         const searchCriteria = document.getElementById('search-criteria').value;
-        if (searchCriteria === 'id') {
-            fetchSuperheroByID(searchInput);
-        } else if (searchCriteria === 'name') {
-            fetchSuperheroByName(searchInput);
-        } else if (searchCriteria === 'power') {
-            fetchSuperheroByPower(searchInput);
-        } else if (searchCriteria === 'race') {
-            fetchSuperheroByRace(searchInput);
-        } else if (searchCriteria === 'publisher') {
-            fetchSuperheroByPublisher(searchInput);
+        if(searchInput!=''){
+            if (searchCriteria === 'name') {
+                fetchSuperheroByName(searchInput);
+            } else if (searchCriteria === 'power') {
+                fetchSuperheroByPower(searchInput);
+            } else if (searchCriteria === 'race') {
+                fetchSuperheroByRace(searchInput);
+            } else if (searchCriteria === 'publisher') {
+                fetchSuperheroByPublisher(searchInput);
+            }
+        } else {
+            alert(`Please Enter Search Criteria!`);
         }
     });
     // Get the select element
