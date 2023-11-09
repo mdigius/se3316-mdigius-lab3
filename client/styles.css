@@ -163,10 +163,26 @@ input:focus {
 .create-list h1 {
   padding-top: 15px;
 }
-.list-results {
+.add-list {
   background-color: #cc2020;
   position: absolute;
   top: 350px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0 10%;
+  border-radius: 50px;
+  width: 90%;
+  height: 150px;
+  box-shadow: 0px 0px 20px goldenrod;
+}
+
+.add-list h1 {
+  padding-top: 15px;
+}
+.list-results {
+  background-color: #cc2020;
+  position: absolute;
+  top: 550px;
   left: 50%;
   transform: translateX(-50%);
   padding: 0 10%;

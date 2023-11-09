@@ -74,7 +74,30 @@ function createResultBox(result) {
         resultBox.appendChild(button)
     return resultBox;
 }
-
+function displayListHeroes() {
+    const listResults = document.querySelector('.list-results');
+    // Iterate over the child elements of listResults
+    for (let i = 0; i < listResults.children.length; i++) {
+        const listItem = listResults.children[i];
+        const listName = listItem.textContent
+        fetch(`http://localhost:3000/api/lists/${listName}`)
+            .then(response => response.json())
+            .then(data => {
+                if(Array.isArray(data)){
+                    for(let i = 0; i < data.length; i++){
+                        for(let j = 0; j < data[i].length; j++){
+                            fetch(`http://localhost:3000/api/superheroInfo/${data[i][j]}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    listItem.appendChild(createResultBox(data))
+                                })
+                            }
+                        
+                    }
+                }
+            })
+    }
+}
 function fetchHeroLists(){
     const url = 'http://localhost:3000/api/lists'
 
@@ -82,17 +105,29 @@ function fetchHeroLists(){
         .then(response => response.json())
         .then(data => {
             const listResults = document.querySelector('.list-results')
+            const listSelector = document.getElementById('list-select')
             listResults.innerHTML = ''
+            listSelector.innerHTML = ''
+
             if (Array.isArray(data)) {
                 for (let i = 0; i < data.length && i < data.length; i++) {
                     console.log(data[i])
                     const heroList = createHeroList(data[i]);
                     listResults.appendChild(heroList);
+
+                    const option = document.createElement('option');
+                    option.value = data[i];
+                    option.textContent = data[i];
+                    listSelector.appendChild(option);
+                    
                 }
             }
-
-
+            
+            displayListHeroes()
+            
+            
         })
+        
     
 }
 
@@ -209,6 +244,18 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
         })
+        document.getElementById('add-button').addEventListener('click', function() {
+            idInput = parseInt(document.getElementById('hero-id-input').value)
+            selectedList = document.getElementById('list-select').value
+            if(!isNaN(idInput)){
+                postSuperHeroIDToList(selectedList, idInput)
+            } else {
+                alert('Please enter a valid hero ID!')
+            }
+            setTimeout(function() {
+                fetchHeroLists()
+            }, 1000)
+        })
         fetchHeroLists()
     }
     if(document.getElementById('search-button')!=null){
@@ -232,6 +279,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     // Get the select element
     var selectElement = document.getElementById('return-n');
+    
 
     // Add an event listener to the select element
     if(selectElement!=null){
