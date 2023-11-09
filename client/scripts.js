@@ -74,7 +74,61 @@ function createResultBox(result) {
 }
 
 
+function postSuperHeroList(listName) {
+    // API url to superhero lists
+    const url = 'http://localhost:3000/api/lists';
+    const data = { listName };
+    
+    // Sends post request with listName in body
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+    // Handles all possible responses from the API
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(responseData => {
+      console.log('POST successful:', responseData);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  }
 
+  function postSuperHeroIDToList(listName, heroID) {
+    // API url to superhero lists
+    const url = `http://localhost:3000/api/lists/${listName}`;
+    const data = { heroID };
+    
+    // Sends post request with listName in body
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+    // Handles all possible responses from the API
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(responseData => {
+      console.log('POST successful:', responseData);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  }
 
 function fetchSuperheroByID(id = 0) {
     const url = `http://localhost:3000/api/superheroInfo/${id}`;
@@ -102,6 +156,8 @@ function fetchSuperheroByRace(race = "") {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    postSuperHeroList('New List')
+    postSuperHeroIDToList('New List', 12)
     document.getElementById('search-button').addEventListener('click', function() {
         const searchInput = document.getElementById('search-input').value;
         const searchCriteria = document.getElementById('search-criteria').value;
