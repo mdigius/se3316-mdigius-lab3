@@ -1,6 +1,8 @@
+// Variables to handle amount of results returned and sorting criteria
 var nCriteria = 8
 var sortCriteria = 'Name'
 
+// Function to handle fetching results from superhero search page
 function fetchAndRenderData(url) {
     fetch(url)
         .then(response => response.json())
@@ -43,7 +45,7 @@ function fetchAndRenderData(url) {
 
 
 
-
+// Function to create the error box if there is an error from api fetch
 function createErrorBox(errorMessage) {
     const errorBox = document.createElement('div');
     errorBox.className = 'error-box';
@@ -60,7 +62,6 @@ function createResultBox(result) {
     const resultBox = document.createElement('div');
     resultBox.className = 'result-box';
     // Adds each key of the result into the box as a p element
-        // If its an object, add each attribute
         for (const key in result) {
             if (result.hasOwnProperty(key)) {
                 const attributeElement = document.createElement('p');
@@ -88,6 +89,7 @@ function createResultBox(result) {
         resultBox.appendChild(button)
     return resultBox;
 }
+// Display all the heroes inside each list
 function displayListHeroes() {
     const listResults = document.querySelector('.list-results');
     // Iterate over the child elements of listResults
@@ -125,6 +127,7 @@ function displayListHeroes() {
             })
     }
 }
+// Fetch all hero lists and populate them
 function fetchHeroLists(){
     const url = 'http://localhost:3000/api/lists'
 
@@ -157,6 +160,7 @@ function fetchHeroLists(){
         
     
 }
+// Functionality to delete a list
 function deleteHeroList(listName) {
     const url = 'http://localhost:3000/api/lists';
     
