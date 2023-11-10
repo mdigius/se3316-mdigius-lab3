@@ -75,7 +75,8 @@ app.route('/api/lists/:name')
         listIDs = await storage.valuesWithKeyMatch(listName)
         const superheroes = new Set()
         listIDs = listIDs[0]
-        if(Array.isArray(listIDs) && listIDs.length > 0){
+        if(Array.isArray(listIDs) && 
+        listIDs.length > 0){
             for(let i=0; i<listIDs.length; i++){
                 console.log(listIDs[i])
                 const superhero = superheroInfo.find((hero) => hero.id === parseInt(listIDs[i]));

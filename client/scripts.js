@@ -290,7 +290,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if(document.getElementById('create-list-button')!=null){
         document.getElementById('create-list-button').addEventListener('click', function() {
             nameInput = document.getElementById('list-name-input').value
-            if(nameInput!='' && /^[0-9a-zA-Z]+$/.test(nameInput)){
+            if(nameInput !== '' && /^[\p{L}0-9]+$/u.test(nameInput)){
                 postSuperHeroList(nameInput)
                 document.getElementById('list-name-input').value = ''
                 setTimeout(function() {
