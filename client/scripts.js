@@ -286,30 +286,35 @@ document.addEventListener('DOMContentLoaded', function() {
     if(document.getElementById('create-list-button')!=null){
         document.getElementById('create-list-button').addEventListener('click', function() {
             nameInput = document.getElementById('list-name-input').value
-            if(nameInput!=''){
+            if(nameInput!='' && /^[0-9a-zA-Z]+$/.test(nameInput)){
                 postSuperHeroList(nameInput)
                 document.getElementById('list-name-input').value = ''
                 setTimeout(function() {
                     fetchHeroLists()
                 }, 1000)
             } else {
-                alert('Please enter a list name!')
+                alert('Please enter a valid list name!')
             }
             
         })
         document.getElementById('add-button').addEventListener('click', function() {
             idInput = parseInt(document.getElementById('hero-id-input').value)
             selectedList = document.getElementById('list-select').value
-            if(!isNaN(idInput)){
-                postSuperHeroIDToList(selectedList, idInput)
-                document.getElementById('hero-id-input').value = ''
-                document.getElementById('list-select').value = selectedList
+            
+            if(selectedList!=''){
+                if(!isNaN(idInput) && /^[0-9]+$/.test(idInput)){
+                    postSuperHeroIDToList(selectedList, idInput)
+                    document.getElementById('hero-id-input').value = ''
+                    document.getElementById('list-select').value = selectedList
+                } else {
+                    alert('Please enter a valid hero ID!')
+                }
+                setTimeout(function() {
+                    fetchHeroLists()
+                }, 1000)
             } else {
-                alert('Please enter a valid hero ID!')
+                alert('No available lists! Please create a list!')
             }
-            setTimeout(function() {
-                fetchHeroLists()
-            }, 1000)
         })
         fetchHeroLists()
     }
@@ -317,7 +322,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('search-button').addEventListener('click', function() {
             const searchInput = document.getElementById('search-input').value;
             const searchCriteria = document.getElementById('search-criteria').value;
-            if(searchInput!=''){
+            if(searchInput!='' && /^[0-9a-zA-Z]+$/.test(searchInput)){
                 if (searchCriteria === 'name') {
                     fetchSuperheroByName(searchInput);
                 } else if (searchCriteria === 'power') {
@@ -328,7 +333,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     fetchSuperheroByPublisher(searchInput);
                 }
             } else {
-                alert(`Please Enter Search Criteria!`);
+                alert(`Please Enter Valid Search Criteria!`);
             }
         });
     }
@@ -360,7 +365,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Search again to display new sorted results without having to press search
             const searchInput = document.getElementById('search-input').value;
             const searchCriteria = document.getElementById('search-criteria').value;
-            if(searchInput!=''){
+            if(searchInput!='' && /^[0-9a-zA-Z]+$/.test(searchInput)){
                 if (searchCriteria === 'name') {
                     fetchSuperheroByName(searchInput);
                 } else if (searchCriteria === 'power') {
