@@ -72,10 +72,16 @@ app.route('/api/lists')
 app.route('/api/lists/:name')
     .get(async (req, res) => {
         const listName = req.params.name
-        const listIDs = await storage.valuesWithKeyMatch(listName)
-
-        if(listIDs.length > 0){
-            res.json(listIDs)
+        listIDs = await storage.valuesWithKeyMatch(listName)
+        const superheroes = new Set()
+        listIDs = listIDs[0]
+        if(Array.isArray(listIDs) && listIDs.length > 0){
+            for(let i=0; i<listIDs.length; i++){
+                console.log(listIDs[i])
+                const superhero = superheroInfo.find((hero) => hero.id === parseInt(listIDs[i]));
+                superheroes.add(superhero)
+            }
+            res.json(Array.from(superheroes))
         } else {
             res.status(404).json({ message: `No existing superhero ids for listName: ${listName}` });
         }

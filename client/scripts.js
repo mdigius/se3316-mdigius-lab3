@@ -1,5 +1,5 @@
 var nCriteria = 8
-var sortCritera = 'Name'
+var sortCriteria = 'Name'
 
 function fetchAndRenderData(url) {
     fetch(url)
@@ -12,9 +12,14 @@ function fetchAndRenderData(url) {
             if (Array.isArray(data)) {
                 // Sort the data based on the desired criteria
                 data.sort((a, b) => {
-                    // You can customize the sorting logic here
-                    // For example, to sort by 'name':
-                    return a.Race.localeCompare(b.Race);
+                    if(sortCriteria == 'Name'){
+                        return a.name.localeCompare(b.name);
+                    } else if(sortCriteria == 'Race'){
+                        return a.Race.localeCompare(b.Race);
+                    } else if(sortCriteria == 'Publisher'){
+                        return a.Publisher.localeCompare(b.Publisher);
+                    }
+                    return a.name.localeCompare(b.name);
                 });
 
                 for (let i = 0; i < nCriteria && i < data.length; i++) {
@@ -88,7 +93,7 @@ function displayListHeroes() {
     // Iterate over the child elements of listResults
     for (let i = 0; i < listResults.children.length; i++) {
         const listItem = listResults.children[i];
-        const listName = listItem.textContent
+        const listName = listItem.textContent;
 
         const button = document.createElement('button')
         button.textContent = 'Delete List!'
@@ -96,20 +101,26 @@ function displayListHeroes() {
             deleteHeroList(listName)
         })
         listItem.appendChild(button)
+
         fetch(`http://localhost:3000/api/lists/${listName}`)
             .then(response => response.json())
             .then(data => {
                 if(Array.isArray(data)){
-                    for(let i = 0; i < data.length; i++){
-                        for(let j = 0; j < data[i].length; j++){
-                            fetch(`http://localhost:3000/api/superheroInfo/${data[i][j]}`)
-                                .then(response => response.json())
-                                .then(data => {
-                                    listItem.appendChild(createResultBox(data))
-                                })
-                            }
-                        
+                    // Sort the data based on the desired criteria
+                data.sort((a, b) => {
+                    if(sortCriteria == 'Name'){
+                        return a.name.localeCompare(b.name);
+                    } else if(sortCriteria == 'Race'){
+                        return a.Race.localeCompare(b.Race);
+                    } else if(sortCriteria == 'Publisher'){
+                        return a.Publisher.localeCompare(b.Publisher);
                     }
+                    return a.name.localeCompare(b.name);
+                });
+                for(let i=0; i<data.length; i++){
+                    listItem.appendChild(createResultBox(data[i]))
+                }
+                    
                 }
             })
     }
@@ -124,7 +135,7 @@ function fetchHeroLists(){
             const listSelector = document.getElementById('list-select')
             listResults.innerHTML = ''
             listSelector.innerHTML = ''
-
+            
             if (Array.isArray(data)) {
                 for (let i = 0; i < data.length && i < data.length; i++) {
                     console.log(data[i])
@@ -323,6 +334,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     // Get the select element
     var selectElement = document.getElementById('return-n');
+    var sortElement = document.getElementById('sort-select');
+    var sortElementLists = document.getElementById('sort-select-lists');
     
 
     // Add an event listener to the select element
@@ -330,6 +343,37 @@ document.addEventListener('DOMContentLoaded', function() {
         selectElement.addEventListener('change', function() {
             nCriteria = parseInt(selectElement.value);
         });
+    }
+    if(sortElementLists!=null){
+        sortElementLists.addEventListener('change', function() {
+            // Change sort criteria to the user selected sort criteria on change
+            sortCriteria = sortElementLists.value;
+            fetchHeroLists()
+            
+        });
+    }
+
+    if(sortElement!=null){
+        sortElement.addEventListener('change', function() {
+            // Change sort criteria to the user selected sort criteria on change
+            sortCriteria = sortElement.value;
+            // Search again to display new sorted results without having to press search
+            const searchInput = document.getElementById('search-input').value;
+            const searchCriteria = document.getElementById('search-criteria').value;
+            if(searchInput!=''){
+                if (searchCriteria === 'name') {
+                    fetchSuperheroByName(searchInput);
+                } else if (searchCriteria === 'power') {
+                    fetchSuperheroByPower(searchInput);
+                } else if (searchCriteria === 'race') {
+                    fetchSuperheroByRace(searchInput);
+                } else if (searchCriteria === 'publisher') {
+                    fetchSuperheroByPublisher(searchInput);
+                }
+            }
+            
+        });
+
     }
     
 });
