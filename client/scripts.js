@@ -1,4 +1,5 @@
 var nCriteria = 8
+var sortCritera = 'Name'
 
 function fetchAndRenderData(url) {
     fetch(url)
@@ -9,6 +10,13 @@ function fetchAndRenderData(url) {
             resultsElement.innerHTML = '';
 
             if (Array.isArray(data)) {
+                // Sort the data based on the desired criteria
+                data.sort((a, b) => {
+                    // You can customize the sorting logic here
+                    // For example, to sort by 'name':
+                    return a.Race.localeCompare(b.Race);
+                });
+
                 for (let i = 0; i < nCriteria && i < data.length; i++) {
                     const resultBox = createResultBox(data[i]);
                     resultsElement.appendChild(resultBox);
@@ -27,6 +35,7 @@ function fetchAndRenderData(url) {
             console.error('Error:', error);
         });
 }
+
 
 
 
@@ -80,6 +89,13 @@ function displayListHeroes() {
     for (let i = 0; i < listResults.children.length; i++) {
         const listItem = listResults.children[i];
         const listName = listItem.textContent
+
+        const button = document.createElement('button')
+        button.textContent = 'Delete List!'
+        button.addEventListener('click', () => {
+            deleteHeroList(listName)
+        })
+        listItem.appendChild(button)
         fetch(`http://localhost:3000/api/lists/${listName}`)
             .then(response => response.json())
             .then(data => {
@@ -130,6 +146,31 @@ function fetchHeroLists(){
         
     
 }
+function deleteHeroList(listName) {
+    const url = 'http://localhost:3000/api/lists';
+    
+    fetch(url, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ listName }),
+    })
+    .then(response => {
+        if (response.status === 200) {
+            console.log(`Superhero list "${listName}" deleted successfully`);
+            fetchHeroLists();
+        } else if (response.status === 404) {
+            console.error(`Superhero list "${listName}" not found in the database`);
+        } else {
+            console.error('An error occurred while deleting the superhero list');
+        }
+    })
+    .catch(error => {
+        console.error('An error occurred while making the DELETE request:', error);
+    });
+}
+
 
 function createHeroList(result){
     // Creates new div element named result box
@@ -192,6 +233,7 @@ function postSuperHeroList(listName) {
     // Handles all possible responses from the API
     .then(response => {
       if (!response.ok) {
+        alert(`Error! Hero already in list!`)
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       return response.json();
@@ -249,6 +291,8 @@ document.addEventListener('DOMContentLoaded', function() {
             selectedList = document.getElementById('list-select').value
             if(!isNaN(idInput)){
                 postSuperHeroIDToList(selectedList, idInput)
+                document.getElementById('hero-id-input').value = ''
+                document.getElementById('list-select').value = selectedList
             } else {
                 alert('Please enter a valid hero ID!')
             }

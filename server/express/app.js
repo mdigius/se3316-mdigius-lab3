@@ -2,10 +2,10 @@ const express = require('express');
 const fs = require('fs');
 const cors = require('cors');
 const storage = require('node-persist');
+const sanitizeHtml = require('sanitize-html');
 
 const initializeStorage = async () => {
     await storage.init();
-    await storage.clear()
   };
 
 initializeStorage();
@@ -21,30 +21,53 @@ app.use(express.json());
 app.route('/api/lists')
     .get(async (req, res) => {
         res.json(await storage.keys());
-
     })
     .post(async (req, res) => {
         const { listName } = req.body;
-        console.log(listName);
-
+        const sanitizedListName = sanitizeHtml(listName, {
+            allowedTags: [], // No HTML tags allowed
+            allowedAttributes: {}, // No attributes allowed
+        });
         const currentListNames = await storage.keys();
 
         for (const existingListName of currentListNames) {
-            console.log(existingListName);
-            if (existingListName === listName) {
+            if (existingListName === sanitizedListName) {
                 return res.status(400).json({ error: 'List name already exists in the database' });
             }
         }
 
-        if (!listName) {
+        if (!sanitizedListName) {
             return res.status(400).json({ error: 'No list name in the request body' });
         }
 
         // Creates a new item in the storage with the listName and an empty array of hero ID's
-        await storage.setItem(listName, []);
+        await storage.setItem(sanitizedListName, []);
 
         // Sends a 201 successful message if the list is created successfully
-        res.status(201).json({ message: 'Superhero list created successfully', listName });
+        res.status(201).json({ message: 'Superhero list created successfully', sanitizedListName });
+    })
+    .delete(async (req, res) => {
+        const { listName } = req.body;
+        // Sanitize user input
+        const sanitizedListName = sanitizeHtml(listName, {
+            allowedTags: [], // No HTML tags allowed
+            allowedAttributes: {}, // No attributes allowed
+        });
+
+        if (!sanitizedListName) {
+            return res.status(400).json({ error: 'No list name in the request body' });
+        }
+
+        const currentListNames = await storage.keys();
+
+        if (!currentListNames.includes(sanitizedListName)) {
+            return res.status(404).json({ error: 'List not found in the database' });
+        }
+
+        // Delete the superhero list from storage
+        await storage.removeItem(sanitizedListName);
+
+        res.status(200).json({ message: 'Superhero list deleted successfully', listName: sanitizedListName });
     });
 app.route('/api/lists/:name')
     .get(async (req, res) => {
@@ -60,24 +83,34 @@ app.route('/api/lists/:name')
     .post(async (req, res) => {
         const listName = req.params.name;
         const idToAdd = req.body.heroID
-        console.log(idToAdd)
-        prevIDs = await storage.getItem(listName)
+        const sanitizedListName = sanitizeHtml(listName, {
+            allowedTags: [], // No HTML tags allowed
+            allowedAttributes: {}, // No attributes allowed
+        });
+
+        const sanitizedID = sanitizeHtml(idToAdd, {
+            allowedTags: [], // No HTML tags allowed
+            allowedAttributes: {}, // No attributes allowed
+        });
+        
+        console.log(sanitizedID)
+        prevIDs = await storage.getItem(sanitizedListName)
         console.log(prevIDs)
-        if (!listName) {
+        if (!sanitizedListName) {
             return res.status(400).json({ error: 'No list name in the request body' });
         }
         
             
-        if (prevIDs.includes(idToAdd)) {
-            return res.status(400).json({ error: `Superhero already in list: ${listName}`});
+        if (prevIDs.includes(sanitizedID)) {
+            return res.status(400).json({ error: `Superhero already in list: ${sanitizedListName}`});
         }
         
-        prevIDs.push(idToAdd)
+        prevIDs.push(sanitizedID)
         // Updates the value for the given list with the new IDs array with the added id
-        await storage.updateItem(listName, prevIDs);
+        await storage.updateItem(sanitizedListName, prevIDs);
 
         // Sends a 201 successful message if the list is created successfully
-        res.status(201).json({ message: `Superhero with id ${idToAdd} successfully added to: `, listName });
+        res.status(201).json({ message: `Superhero with id ${sanitizedID} successfully added to: `, sanitizedListName });
 
     })
 
