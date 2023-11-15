@@ -74,7 +74,7 @@ function createResultBox(result) {
         button.addEventListener('click', () => {
             const heroName = result['name'];
             // Fetch powers for given hero name from API
-            fetch(`http://54.174.115.67:3000/api/powers/hero/${heroName}`)
+            fetch(`http://52.54.184.137:3000/api/powers/hero/${heroName}`)
                 .then(response => response.json())
                 .then(powers => {
                     // Put each power on a new line
@@ -104,7 +104,7 @@ function displayListHeroes() {
         })
         listItem.appendChild(button)
 
-        fetch(`http://54.174.115.67:3000/api/lists/${listName}`)
+        fetch(`http://52.54.184.137:3000/api/lists/${listName}`)
             .then(response => response.json())
             .then(data => {
                 if(Array.isArray(data)){
@@ -129,7 +129,7 @@ function displayListHeroes() {
 }
 // Fetch all hero lists and populate them
 function fetchHeroLists(){
-    const url = 'http://54.174.115.67:3000/api/lists'
+    const url = 'http://52.54.184.137:3000/api/lists'
 
     fetch(url)
         .then(response => response.json())
@@ -162,7 +162,7 @@ function fetchHeroLists(){
 }
 // Functionality to delete a list
 function deleteHeroList(listName) {
-    const url = 'http://54.174.115.67:3000/api/lists';
+    const url = 'http://52.54.184.137:3000/api/lists';
     
     fetch(url, {
         method: 'DELETE',
@@ -204,7 +204,7 @@ function createHeroList(result){
 
 function postSuperHeroList(listName) {
     // API url to superhero lists
-    const url = 'http://54.174.115.67:3000/api/lists';
+    const url = 'http://52.54.184.137:3000/api/lists';
     const data = { listName };
     
     // Sends post request with listName in body
@@ -234,7 +234,7 @@ function postSuperHeroList(listName) {
 
   function postSuperHeroIDToList(listName, heroID) {
     // API url to superhero lists
-    const url = `http://54.174.115.67:3000/api/lists/${listName}`;
+    const url = `http://52.54.184.137:3000/api/lists/${listName}`;
     const data = { heroID };
     
     // Sends post request with listName in body
@@ -262,27 +262,27 @@ function postSuperHeroList(listName) {
   }
 
 function fetchSuperheroByID(id = 0) {
-    const url = `http://54.174.115.67:3000/api/superheroInfo/${id}`;
+    const url = `http://52.54.184.137:3000/api/superheroInfo/${id}`;
     fetchAndRenderData(url);
 }
 
 function fetchSuperheroByName(name = "") {
-    const url = `http://54.174.115.67:3000/api/superheroInfo/name/${name}`;
+    const url = `http://52.54.184.137:3000/api/superheroInfo/name/${name}`;
     fetchAndRenderData(url);
 }
 
 function fetchSuperheroByPower(power = "") {
-    const url = `http://54.174.115.67:3000/api/powers/${power}`;
+    const url = `http://52.54.184.137:3000/api/powers/${power}`;
     fetchAndRenderData(url);
 }
 
 function fetchSuperheroByPublisher(publisher = "") {
-    const url = `http://54.174.115.67:3000/api/publishers/${publisher}`;
+    const url = `http://52.54.184.137:3000/api/publishers/${publisher}`;
     fetchAndRenderData(url);
 }
 
 function fetchSuperheroByRace(race = "") {
-    const url = `http://54.174.115.67:3000/api/race/${race}`;
+    const url = `http://52.54.184.137:3000/api/race/${race}`;
     fetchAndRenderData(url);
 }
 
